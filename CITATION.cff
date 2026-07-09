@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: 'x402-Optimism: HTTP 402 Payment-Gated Routing on Optimism'
+version: 1.0.0
+date-released: '2026-07-09'
+type: software
+authors:
+  - family-names: Patterson
+    given-names: Richard
+    alias: De-ASI-INTERFACE
+    country: US
+repository-code: 'https://github.com/De-ASI-INTERFACE/x402-optimism-extension'
+license: MIT
+abstract: >-
+  x402 HTTP 402 payment-gated routing for Optimism OP Mainnet. ERC-20/ETH
+  payment gates, Velodrome v2 routing, Superchain interop, nonce replay
+  prevention, block timestamp expiry, Lean 4 + Mathlib formal verification.
+keywords: [optimism, op-stack, superchain, velodrome, x402, http-402, lean4, mathlib, richard-patterson]
