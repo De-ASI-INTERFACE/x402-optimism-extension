@@ -1,34 +1,29 @@
--- x402-Optimism Basic | Author: Richard Patterson (@De-ASI-INTERFACE)
-import Mathlib.Data.Finset.Basic
-import Mathlib.Data.Nat.Basic
+-- ============================================================
+-- x402-Optimism: Basic Re-export Shim
+-- Author: Richard Patterson (@De-ASI-INTERFACE)
+-- Date: 2026-07-09
+-- Chain: Optimism OP Mainnet / ERC-20 / Velodrome v2
+--
+-- Re-exports X402Optimism.PaymentVerification as the single
+-- authoritative source of all shared types and definitions.
+-- Chain-prefixed theorem aliases are provided for ergonomic use.
+-- ============================================================
+import X402Optimism.PaymentVerification
 
 namespace X402Optimism
 
-/-- Payment authorization struct for OP Mainnet x402 gates -/
-structure PaymentAuth where
-  nonce      : Nat
-  amount     : Nat
-  expires_at : Nat
-  deriving Repr, DecidableEq
-
-/-- Facilitator contract state -/
-structure FacilitatorState where
-  used_nonces : Finset Nat
-  block_time  : Nat
-  deriving Repr
-
-/-- A payment auth is valid iff its nonce is unused and not yet expired -/
-def verify (a : PaymentAuth) (s : FacilitatorState) : Prop :=
-  a.nonce ∉ s.used_nonces ∧ s.block_time ≤ a.expires_at
-
-/-- Replay prevention: verified payment nonce cannot already be in used set -/
+/-- Alias: replay prevention under the Optimism chain prefix.
+    result type: a.nonce ∉ s.used_nonces. -/
 theorem optimism_replay_prevented
-    (a : PaymentAuth) (s : FacilitatorState) (h : verify a s)
-    : a.nonce ∉ s.used_nonces := h.1
+    (a : PaymentAuth) (s : FacilitatorState) (h : verify a s) :
+    a.nonce ∉ s.used_nonces :=
+  replay_prevented a s h
 
-/-- Expiry: verified payment block_time is within expiry window -/
+/-- Alias: expiry enforcement under the Optimism chain prefix.
+    Delegates to within_expiry: s.block_time ≤ a.expires_at. -/
 theorem optimism_not_expired
-    (a : PaymentAuth) (s : FacilitatorState) (h : verify a s)
-    : s.block_time ≤ a.expires_at := h.2
+    (a : PaymentAuth) (s : FacilitatorState) (h : verify a s) :
+    s.block_time ≤ a.expires_at :=
+  within_expiry a s h
 
 end X402Optimism
